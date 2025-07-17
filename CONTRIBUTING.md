@@ -55,11 +55,10 @@ While coding:
 ## Coding Style
 
 - Follow the existing code style.
-- Run the linter before submitting:
+- Use Prettier for formatting.
   ```
   npm run fmt
   ```
-- Use Prettier for formatting (if applicable).
 
 ## Tests
 
