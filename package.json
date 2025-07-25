@@ -1,6 +1,6 @@
 {
     "name": "@solana/pay",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "author": "Solana Maintainers <maintainers@solana.foundation>",
     "repository": "https://github.com/solana-labs/solana-pay",
     "license": "Apache-2.0",
@@ -57,7 +57,7 @@
         "@types/eslint": "^8.4.6",
         "@types/eslint-plugin-prettier": "^3.1.0",
         "@types/jest": "^29.0.2",
-        "@types/node": "^18.7.17",
+        "@types/node": "^20.0.0",
         "@types/node-fetch": "^2.6.2",
         "@types/prettier": "^2.7.0",
         "@typescript-eslint/eslint-plugin": "^5.34.0",
@@ -74,8 +74,8 @@
         "ts-jest": "^29.0.0",
         "ts-node": "^10.9.1",
         "tslib": "^2.4.0",
-        "typedoc": "^0.23.14",
-        "typescript": "^4.8.3",
+        "typedoc": "^0.26.0",
+        "typescript": "^5.3.3",
         "typescript-esm": "^2.0.0"
     }
 }
