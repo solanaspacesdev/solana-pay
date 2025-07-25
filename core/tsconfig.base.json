@@ -9,6 +9,8 @@
         "noEmitOnError": true,
         "resolveJsonModule": true,
         "strict": true,
-        "stripInternal": true
+        "stripInternal": true,
+        "lib": ["ESNext"],
+        "types": ["node", "jest"]
     }
 }
