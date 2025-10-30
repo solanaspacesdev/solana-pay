@@ -39,6 +39,8 @@ export interface ValidateTransferFields {
     reference?: References;
     /** `memo` in the [Solana Pay spec](https://github.com/solana-labs/solana-pay/blob/master/SPEC.md#memo). */
     memo?: Memo;
+    /** allows for recipients to be Off Curve (multi-sig wallets) */
+    allowRecipientOffCurve?: boolean
 }
 
 /**
@@ -54,7 +56,7 @@ export interface ValidateTransferFields {
 export async function validateTransfer(
     connection: Connection,
     signature: TransactionSignature,
-    { recipient, amount, splToken, reference, memo }: ValidateTransferFields,
+    { recipient, amount, splToken, reference, memo, allowRecipientOffCurve = false }: ValidateTransferFields,
     options?: { commitment?: Finality }
 ): Promise<TransactionResponse> {
     const response = await connection.getTransaction(signature, options);
@@ -77,7 +79,7 @@ export async function validateTransfer(
     const instruction = instructions.pop();
     if (!instruction) throw new ValidateTransferError('missing transfer instruction');
     const [preAmount, postAmount] = splToken
-        ? await validateSPLTokenTransfer(instruction, message, meta, recipient, splToken, reference)
+        ? await validateSPLTokenTransfer(instruction, message, meta, recipient, splToken, reference, allowRecipientOffCurve)
         : await validateSystemTransfer(instruction, message, meta, recipient, reference);
     if (postAmount.minus(preAmount).lt(amount)) throw new ValidateTransferError('amount not transferred');
 
@@ -134,9 +136,10 @@ async function validateSPLTokenTransfer(
     meta: ConfirmedTransactionMeta,
     recipient: Recipient,
     splToken: SPLToken,
-    references?: Reference[]
+    references?: Reference[],
+    allowRecipientOffCurve = false,
 ): Promise<[BigNumber, BigNumber]> {
-    const recipientATA = await getAssociatedTokenAddress(splToken, recipient);
+    const recipientATA = await getAssociatedTokenAddress(splToken, recipient, allowRecipientOffCurve);
     const accountIndex = message.accountKeys.findIndex((pubkey) => pubkey.equals(recipientATA));
     if (accountIndex === -1) throw new ValidateTransferError('recipient not found');
 
